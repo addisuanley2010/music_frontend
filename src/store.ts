@@ -1,13 +1,12 @@
 
-import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import { inputReducer } from './redux/features/inputSlice'
 import { musicReducer } from './redux/features/musicSlice'
-
 import { rootSaga } from './redux/saga/rootSaga';
 import { statReducer } from './redux/features/statSlice';
 import { countReducer } from './redux/features/countSlice';
 import { sideNavReducer } from './redux/features/sideNavSlice';
+import { configureStore } from '@reduxjs/toolkit';
 
 const sagaMiddleware = createSagaMiddleware();
 

@@ -1,13 +1,14 @@
+
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import ErrorPage from "./components/ErrorPage";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Statistics from "./components/Statistics";
+import { ToastContainer } from 'react-toastify';
+import App from "./App";
 const router = createBrowserRouter([
   {
     path: "/",
