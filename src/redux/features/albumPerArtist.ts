@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import {  createSlice } from "@reduxjs/toolkit";
 import {  AlbumsPerArtistInterface } from "../../interface/musicInterface";
 
 const initialState: AlbumsPerArtistInterface = {};

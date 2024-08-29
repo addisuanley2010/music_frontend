@@ -92,11 +92,6 @@ const SmartLine = styled.hr`
   margin: 10px 0;
 `;
 
-const AlbumCount = styled.span`
-  font-size: 14px;
-  color: #888;
-`;
-
 const Artists = () => {
   const artist: { [key: string]: number } = useSelector(
     (state: RootState) => state.count.artist
