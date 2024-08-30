@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { makeLoading } from "../redux/features/musicSlice";
 import { ButtonDiv } from "../styles/Table.style";
 import { DialogContent, DialogWrapper } from "../styles/Dialog.style";
+import { RootState } from "../store";
 
 interface CreateDialogProps {
   createDialog: boolean;
@@ -30,7 +31,7 @@ const CreateDialog: React.FC<CreateDialogProps> = ({
     gener: "",
   });
 
-  const loading: boolean = useSelector((state: any) => state.music.loading);
+  const loading: boolean = useSelector((state: RootState) => state.music.loading);
   const dispatch = useDispatch();
 
   useEffect(() => {

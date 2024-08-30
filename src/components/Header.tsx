@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Adda,
   HeaderStyle,
@@ -12,11 +12,12 @@ import { ImStatsDots } from "react-icons/im";
 import { useDispatch } from "react-redux";
 import { toggleSideNav } from "../redux/features/sideNavSlice";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Header = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleToggleSideNav = () => {
     dispatch(toggleSideNav());
@@ -27,6 +28,11 @@ const Header = () => {
     { to: "/statistics", icon: ImStatsDots, text: "Statistics" },
   ];
 
+  useEffect(() => {
+    const currentIndex = navItems.findIndex(item => item.to === location.pathname);
+    setActiveIndex(currentIndex);
+  }, [location]);
+
   return (
     <HeaderStyle>
       <StyledNav>
@@ -34,9 +40,8 @@ const Header = () => {
           <li
             key={item.to}
             style={{
-              backgroundColor: activeIndex === index + 1 ? "#045B92" : "",
+              backgroundColor: activeIndex === index ? "#045B92" : "",
             }}
-            onClick={() => setActiveIndex(index + 1)}
           >
             <Link to={item.to}>
               <Adda>

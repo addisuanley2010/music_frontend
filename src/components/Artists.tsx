@@ -1,6 +1,9 @@
-import { useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { RootState } from "../store";
 import styled from "styled-components";
+import EmptyData from "../utils/EmptyData";
+import { StyledButton } from "../styles/Form.style";
+
 
 const Container = styled.div`
   display: flex;
@@ -41,12 +44,12 @@ const TableHeader = styled.th`
   color: #fff;
   border-radius: 10px;
   @media (max-width: 768px) {
-font-size: 20px;
+    font-size: 20px;
   }
 `;
 
 const TableRow = styled.tr`
-border: 10px solid;
+  border: 10px solid;
 `;
 
 const TableCell = styled.td`
@@ -67,8 +70,8 @@ const CountContainer = styled.div`
   margin-top: 20px;
   border: 1px solid;
   border-radius: 5px;
-  &:hover{
-    background-color: #D2BFBF;
+  &:hover {
+    background-color: #d2bfbf;
     color: white;
   }
 `;
@@ -97,51 +100,60 @@ const Artists = () => {
     (state: RootState) => state.count.artist
   );
 
-  const albumPerArtist: { [key: string]: { [key: string]: number } } = useSelector(
-    (state: RootState) => state.count.albumsPerArtist
-  );
+  const albumPerArtist: { [key: string]: { [key: string]: number } } =
+    useSelector((state: RootState) => state.count.albumsPerArtist);
+  
 
   return (
     <>
       <Heading>Artists</Heading>
 
-      <Container>
-        {Object.entries(artist).map(([name, count]) => {
-          const albums = albumPerArtist[name] || {};
-          const albumEntries = Object.entries(albums);
+      {Object.keys(artist).length === 0 ? (
+        <EmptyData />
+      ) : (
+        <Container>
+          {Object.entries(artist).map(([name, count]) => {
+            const albums = albumPerArtist[name] || {};
+            const albumEntries = Object.entries(albums);
 
-          return (
-            <Card key={name}>
-              <Name>{name}</Name>
-              <SmartLine />
-              <Table>
-                <thead>
-                  <TableRow>
-                    <TableHeader>Album Name</TableHeader>
-                    <TableHeader>Number of Songs</TableHeader>
-                  </TableRow>
-                </thead>
-                <tbody>
-                  {albumEntries.map(([albumName, albumCount]) => (
-                    <TableRow key={albumName}>
-                      <TableCell>{albumName}</TableCell>
-                      <TableCell>{albumCount} songs</TableCell>
+            return (
+              <Card key={name}>
+                <StyledButton >
+                  Name of Artist: <Name>{name}</Name>
+                </StyledButton>
+
+                <SmartLine />
+                <Table>
+                  <thead>
+                    <TableRow>
+                      <TableHeader>Album Name</TableHeader>
+                      <TableHeader>Number of Songs</TableHeader>
                     </TableRow>
-                  ))}
-                </tbody>
-              </Table>
-              <CountContainer>
-                <CountLabel>Total Songs:</CountLabel>
-                <CountValue>{count}</CountValue>
-              </CountContainer>
-              <CountContainer>
-                <CountLabel>Album{albumEntries.length > 1 ? "s" : ""}:</CountLabel>
-                <CountValue>{albumEntries.length}</CountValue>
-              </CountContainer>
-            </Card>
-          );
-        })}
-      </Container>
+                  </thead>
+                  <tbody>
+                    {albumEntries.map(([albumName, albumCount]) => (
+                      <TableRow key={albumName}>
+                        <TableCell>{albumName}</TableCell>
+                        <TableCell>{albumCount} songs</TableCell>
+                      </TableRow>
+                    ))}
+                  </tbody>
+                </Table>
+                <CountContainer>
+                  <CountLabel>Total Songs:</CountLabel>
+                  <CountValue>{count}</CountValue>
+                </CountContainer>
+                <CountContainer>
+                  <CountLabel>
+                    Album{albumEntries.length > 1 ? "s" : ""}:
+                  </CountLabel>
+                  <CountValue>{albumEntries.length}</CountValue>
+                </CountContainer>
+              </Card>
+            );
+          })}
+        </Container>
+      )}
     </>
   );
 };

@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MusicInterface } from '../../interface/musicInterface';
+import { toast } from 'react-toastify';
 
 interface TodoState {
   musics: MusicInterface[];
   loading: boolean
   errorMessage: string
+  success: boolean
 }
 
 
@@ -12,7 +14,8 @@ interface TodoState {
 const initialState: TodoState = {
   musics: [],
   loading: false,
-  errorMessage: ''
+  errorMessage: '',
+  success: false
 };
 
 const musicSlice = createSlice({
@@ -31,6 +34,7 @@ const musicSlice = createSlice({
     },
     closeErrorMessage: (state) => {
       state.errorMessage = ''
+      state.success=false
     },
 
     getMusic: (state, action: PayloadAction<MusicInterface[]>) => { // get music list from saga and add to music store
@@ -41,6 +45,8 @@ const musicSlice = createSlice({
     deleteMusic: (state, action: PayloadAction<string>) => {
       state.musics = state.musics.filter((music) => music._id !== action.payload);
       state.loading = false
+      state.success=true
+      
 
     },
 
@@ -50,16 +56,18 @@ const musicSlice = createSlice({
         state.musics[index] = action.payload;
       }
       state.loading = false;
+      state.success = true
     },
 
     addMusic: (state, action: PayloadAction<MusicInterface>) => {//add single music to the store
       state.loading = false
       state.musics.push(action.payload);
+      state.success = true
 
     },
 
   },
 });
 
-export const { closeErrorMessage, closeLoading, makeLoading, getMusicLoading, getMusic, deleteMusic, addMusic,updateMusic } = musicSlice.actions;
+export const { closeErrorMessage, closeLoading, makeLoading, getMusicLoading, getMusic, deleteMusic, addMusic, updateMusic } = musicSlice.actions;
 export const musicReducer = musicSlice.reducer;

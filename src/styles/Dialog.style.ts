@@ -11,6 +11,7 @@ export const DialogWrapper = styled.div<{ open?: boolean }>`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+
 `;
 
 export const DialogContent = styled.div`
@@ -20,7 +21,7 @@ export const DialogContent = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
-export const ContentWrapper = styled.div<{ isActive: boolean }>`
-  pointer-events: ${props => props.isActive ? 'none' : 'auto'};
+export const ContentWrapper = styled.div<{ isactive: boolean }>`
+  pointer-events: ${props => props.isactive ? 'none' : 'auto'};
   transition: opacity 0.3s ease-in-out;
 `;

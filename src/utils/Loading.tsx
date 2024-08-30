@@ -1,4 +1,5 @@
 import styled, { keyframes } from "styled-components";
+import { DialogWrapper } from "../styles/Dialog.style";
 
 const spinAnimation = keyframes`
   0% {
@@ -7,13 +8,6 @@ const spinAnimation = keyframes`
   100% {
     transform: rotate(360deg);
   }
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50vh;
 `;
 
 const LoadingSpinner = styled.div`
@@ -25,11 +19,18 @@ const LoadingSpinner = styled.div`
   animation: ${spinAnimation} 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 `;
 
-const Loading = () => {
+interface LoadingProps {
+  isDialogOpen: boolean;
+}
+
+const Loading: React.FC<LoadingProps> = ({ isDialogOpen }) => {
   return (
-    <LoadingContainer>
+    <DialogWrapper
+      open={isDialogOpen}
+      style={{ pointerEvents: "auto", opacity: 1 }}
+    >
       <LoadingSpinner />
-    </LoadingContainer>
+    </DialogWrapper>
   );
 };
 

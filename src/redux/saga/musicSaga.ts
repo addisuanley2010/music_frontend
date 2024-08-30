@@ -17,13 +17,20 @@ interface mytype {
 
 
 // ...................GET ALL MUSIC...............................
-
-function* handleGetMusic() {
-
-  const { data } = yield call(axios.get, `${api}/get`)
-  yield put(getMusic(data?.response))
-
+ function* handleGetMusic(action: any) {
+    try {
+      const { filterType, filterValue } = action.payload || {}
+      let url = `${api}/get`
+      if (filterType && filterValue) {
+        url = `${api}/filter?${filterType}=${filterValue}`
+      }
+      const { data } = yield call(axios.get, url)
+      yield put(getMusic(data?.response))
+    } catch (error) {
+      yield put(closeLoading(' failed. try again later!'))
+    }
 }
+
 // ...................DELETE MUSIC...............................
 
 function* handleDeleteTodoSaga(action: mytype) {
@@ -37,7 +44,6 @@ function* handleDeleteTodoSaga(action: mytype) {
     yield getStatics()
 
   } catch (error) {
-    console.log(error)
     yield put(closeLoading('delete failed. try again later!'))
   }
 
@@ -59,7 +65,7 @@ function* handleAddMusic(action: any) {//myType
 
 
   } catch (error) {
-    yield put(closeLoading('you are not create the music'))
+    yield put(closeLoading('create failed. try again later!'))
   }
 }
 
@@ -78,7 +84,7 @@ function* handleEditMusic(action: any) {//myType
 
 
   } catch (error) {
-    yield put(closeLoading('music not updated'))
+    yield put(closeLoading('update failed. try again later!'))
   }
 }
 

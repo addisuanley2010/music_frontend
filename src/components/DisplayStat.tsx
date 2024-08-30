@@ -1,5 +1,5 @@
-
 import styled from "styled-components";
+import EmptyData from "../utils/EmptyData";
 
 const Container = styled.div`
   display: flex;
@@ -51,19 +51,24 @@ const DisplayStat = (artist: { [key: string]: number }) => {
 
 
   return (
-    <Container>
-      {Object.entries(artist).map(([name, count]) => (
-        <Card key={name}>
-          <Name>{name}</Name>
-          <SmartLine />
-          <List>
-          <Count>Total Songs :</Count>
-          <Count>{count}</Count>
-          </List>
-
-        </Card>
-      ))}
-    </Container>
+    <>
+      {Object.keys(artist).length === 0 ? (
+        <EmptyData />
+      ) : (
+        <Container>
+          {Object.entries(artist).map(([name, count]) => (
+            <Card key={name}>
+              <Name>{name}</Name>
+              <SmartLine />
+              <List>
+              <Count>Total Songs :</Count>
+              <Count>{count}</Count>
+              </List>
+            </Card>
+          ))}
+        </Container>
+      )}
+    </>
   );
 };
 

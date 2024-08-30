@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
-import ErrorPage from "./components/ErrorPage";
+import ErrorPage from "./utils/ErrorPage";
 import "react-toastify/dist/ReactToastify.css";
 import Statistics from "./components/Statistics";
 import { ToastContainer } from 'react-toastify';

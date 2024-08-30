@@ -2,8 +2,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { ButtonDiv, StyledTable, TableContainer } from "../styles/Table.style";
 import { StyledButton } from "../styles/Button.style";
-import { closeErrorMessage, makeLoading } from "../redux/features/musicSlice";
-import Loading from "./Loading";
+import {
+  closeErrorMessage,
+  getMusicLoading,
+  makeLoading,
+} from "../redux/features/musicSlice";
+import Loading from "../utils/Loading";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import CreateDialog from "../utils/CreateDialog";
@@ -11,12 +15,8 @@ import { MusicInterface } from "../interface/musicInterface";
 import { ContentWrapper } from "../styles/Dialog.style";
 import ConfirmDialog from "../utils/ConfirmDialog";
 import { FaRegSquarePlus, FaRegTrashCan } from "react-icons/fa6";
-import {
-  CreateMusicButton,
-  EmptyPlaylistContainer,
-  EmptyPlaylistText,
-  EmptyPlaylistTitle,
-} from "../styles/Error.style";
+import EmptyData from "../utils/EmptyData";
+import SelectComponent from "../utils/SelectComponent";
 
 const MusicList = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -25,6 +25,8 @@ const MusicList = () => {
     {} as MusicInterface
   );
   const [deleteId, setDeleteId] = useState<string | undefined>();
+  const [filterType, setFilterType] = useState("all");
+  const [filterValue, setFilterValue] = useState("");
 
   const handleEdit = (row: MusicInterface) => {
     setEditInput(row);
@@ -43,23 +45,29 @@ const MusicList = () => {
   const loading: boolean = useSelector(
     (state: RootState) => state.music.loading
   );
+  const success: boolean = useSelector(
+    (state: RootState) => state.music.success
+  );
   const errorMessage: string = useSelector(
     (state: RootState) => state.music.errorMessage
   );
 
   if (errorMessage !== "") {
-    toast.info(errorMessage, {
-      position: "top-center",
-      autoClose: 1000,
-    });
+    if (success) {
+      toast.success(errorMessage, {
+        position: "top-center",
+        autoClose: 1000,
+      });
+    } else {
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 1000,
+      });
+    }
     dispatch(closeErrorMessage());
   }
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  const confirmDelete = (e: any) => {
+  const confirmDelete = (e: Event) => {
     e.preventDefault();
     dispatch(makeLoading());
     if (deleteId) {
@@ -68,7 +76,7 @@ const MusicList = () => {
     setIsDialogOpen(false);
   };
 
-  const cancelDelete = (e: any) => {
+  const cancelDelete = (e: Event) => {
     e.preventDefault();
     setIsDialogOpen(false);
   };
@@ -77,36 +85,20 @@ const MusicList = () => {
     setCreateDialog(false);
   };
 
+  const handleFilter = () => {
+    if (filterType !== "all" && filterValue !== "") {
+      const dataa = { filterType: filterType, filterValue: filterValue };
+      dispatch(getMusicLoading(dataa as any));
+    } else {
+      dispatch(getMusicLoading());
+    }
+  };
+
   return (
-    <ContentWrapper isActive={isDialogOpen || createDialog}>
+    <ContentWrapper isactive={isDialogOpen || createDialog}>
+      <Loading isDialogOpen={loading} />
       {musicList?.length === 0 ? (
-        <EmptyPlaylistContainer>
-          <EmptyPlaylistTitle>No Music Found</EmptyPlaylistTitle>
-          <EmptyPlaylistText>
-            Your playlist is empty. Add some tunes!
-          </EmptyPlaylistText>
-          <CreateDialog
-            createDialog={createDialog}
-            closeCreateDialog={closeCreateDialog}
-            musicInput={editInput}
-            style={{ pointerEvents: "auto", opacity: 1 }}
-          />
-          <CreateMusicButton
-            onClick={() => {
-              setEditInput({
-                ...editInput,
-                title: "",
-                artist: "",
-                gener: "",
-                album: "",
-                _id: "",
-              });
-              setCreateDialog(true);
-            }}
-          >
-            <FaRegSquarePlus /> Create Music
-          </CreateMusicButton>
-        </EmptyPlaylistContainer>
+        <EmptyData />
       ) : (
         <TableContainer>
           <CreateDialog
@@ -120,32 +112,35 @@ const MusicList = () => {
             cancelDelete={cancelDelete}
             confirmDelete={confirmDelete}
           />
-          <StyledButton
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "10px 20px",
-              borderRadius: "8px",
-              color: "white",
-              fontWeight: "bold",
-              transition: "all 0.3s ease",
-            }}
-            onClick={() => {
-              setEditInput({
-                ...editInput,
-                title: "",
-                artist: "",
-                gener: "",
-                album: "",
-                _id: "",
-              });
-              setCreateDialog(!createDialog);
-            }}
-          >
-            <FaRegSquarePlus />
-            &nbsp; &nbsp; Create Music
-          </StyledButton>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
+              <StyledButton
+                onClick={() => {
+                  setEditInput({
+                    ...editInput,
+                    title: "",
+                    artist: "",
+                    gener: "",
+                    album: "",
+                    _id: "",
+                  });
+                  setCreateDialog(!createDialog);
+                }}
+              >
+                Create Music
+              </StyledButton>
+            </div>
+
+            <SelectComponent
+              filterType={filterType}
+              setFilterType={setFilterType}
+              filterValue={filterValue}
+              setFilterValue={setFilterValue}
+              musicList={musicList}
+              handleFilter={handleFilter}
+            />
+          </div>
 
           <StyledTable>
             <thead>

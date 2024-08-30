@@ -45,7 +45,9 @@ export const StyledInput = styled.input`
     box-shadow: 0 0 5px rgba(255, 105, 180, 0.3);
   }
   @media (max-width: 768px) {
-      margin: 10px;
+      margin-top: 10px;
+      margin-left: 20%;
+      margin-right: 20%;
 
   }
 `;

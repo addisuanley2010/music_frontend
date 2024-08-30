@@ -11,7 +11,6 @@ const Layout = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch({ type: "GET_STATISTICS" });
-
     dispatch(getMusicLoading());
   }, [dispatch]);
 
